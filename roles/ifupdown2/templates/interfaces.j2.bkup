@@ -1,0 +1,40 @@
+{% set intvars = interfaces[ansible_hostname] %}
+# /etc/network/interfaces template for switches ({{ansible_hostname}})
+# Created by Ansible
+
+source /etc/network/interfaces.d/*.intf
+
+auto mgmt
+iface mgmt
+  address 127.0.0.1/8
+  vrf-table auto
+
+auto eth0
+iface eth0 inet static
+  vrf mgmt
+  address {{ intvars.management }}
+  netmask 255.255.255.0
+  gateway 10.130.250.1
+
+auto lo
+iface lo inet loopback
+  address {{ intvars.loopback }}/32
+
+auto br0
+iface br0
+  iface br0
+  bridge-vlan-aware yes
+  bridge-pvid 12
+  bridge-vids 12 21 24 26 60 70 110 210 250 600 1500-1999 4091 
+  bridge-allow-untagged yes
+  bridge-ports glob {{ intvars.ports }}
+  bridge-stp on
+
+
+{% for iface in intvars.neighbors %}
+auto {{ iface }}
+iface {{ iface }}
+{% endfor %}
+
+
+

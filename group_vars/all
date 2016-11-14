@@ -1,0 +1,28 @@
+# networking
+networks:
+    "172.16.1.0/24":
+        source: "grr-lf01"
+    "172.16.2.0/24":
+        source: "grr-lf02"
+interfaces:
+    grr-lf01:
+        loopback: "10.130.70.27"
+        asn: 65011
+        management: "10.130.250.27"
+        ports: "swp1-48"
+        vtep: 1001
+        neighbors:
+            swp51:
+            swp52:
+    grr-sp01:
+        loopback: "10.130.70.28"
+        management: "10.130.250.28"
+        asn: 65020
+        vtep: 1002
+        ports: "swp3-32"
+        neighbors:
+            swp1:
+            swp2:
+           
+
+ 
